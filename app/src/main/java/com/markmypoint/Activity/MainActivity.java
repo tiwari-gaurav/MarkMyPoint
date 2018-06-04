@@ -96,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         textSource.setText("ACTION_MOVE- " + x + " : " + y);
-                        drawOnRectProjectedBitMap((ImageView) v, bitmapMaster, x, y);
+                        drawShape((ImageView) v, bitmapMaster, x, y);
 
                         break;
                     case MotionEvent.ACTION_UP:
                         textSource.setText("ACTION_UP- " + x + " : " + y);
-                        drawOnRectProjectedBitMap((ImageView) v, bitmapMaster, x, y);
+                        drawShape((ImageView) v, bitmapMaster, x, y);
                         points.add(new Point(x, y));
                         points.add(new Point(v.getWidth(), v.getHeight()));
                         points.add(new Point(bitmapMaster.getWidth(), bitmapMaster.getHeight()));
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void drawOnRectProjectedBitMap(ImageView iv, Bitmap bm, int x, int y) {
+    private void drawShape(ImageView iv, Bitmap bm, int x, int y) {
         if (x < 0 || y < 0 || x > iv.getWidth() || y > iv.getHeight()) {
             //outside ImageView
             return;
