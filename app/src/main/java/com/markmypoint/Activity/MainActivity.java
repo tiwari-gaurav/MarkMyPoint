@@ -24,13 +24,17 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*This class will select an image from a gallery.
+* User can draw multiple squares on a image*/
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnLoadImage, btnCoordinate;
     TextView textSource, showCoordinates;
-    ImageView imageResult, imageDrawingPane;
+    ImageView selectedImage, imageDrawingPane;
 
-    final int RQS_IMAGE1 = 1;
+    final int RQS_CODE = 1;
 
     Uri source;
     Bitmap bitmapMaster;
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnLoadImage = (Button) findViewById(R.id.loadimage);
         textSource = (TextView) findViewById(R.id.sourceuri);
         showCoordinates = (TextView) findViewById(R.id.showCoordinates);
-        imageResult = (ImageView) findViewById(R.id.result);
+        selectedImage = (ImageView) findViewById(R.id.result);
         imageDrawingPane = (ImageView) findViewById(R.id.drawingpane);
 
         btnLoadImage.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arg0) {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, RQS_IMAGE1);
+                startActivityForResult(intent, RQS_CODE);
                 if (points.size() > 0) {
                     points.removeAll(points);
                 }
@@ -70,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
         btnCoordinate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // method to get the coordinates of a square
                 getCoordinates(points);
             }
         });
 
-        imageResult.setOnTouchListener(new View.OnTouchListener() {
+        selectedImage.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -92,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         textSource.setText("ACTION_MOVE- " + x + " : " + y);
                         drawOnRectProjectedBitMap((ImageView) v, bitmapMaster, x, y);
-                        /*points.add(new Point(v.getWidth(),v.getHeight()));
-                        points.add(new Point(bitmapMaster.getWidth(),bitmapMaster.getHeight()));*/
 
                         break;
                     case MotionEvent.ACTION_UP:
@@ -192,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case RQS_IMAGE1:
+                case RQS_CODE:
                     source = data.getData();
                     textSource.setText(source.toString());
 
@@ -217,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                         canvasMaster = new Canvas(bitmapMaster);
                         canvasMaster.drawBitmap(tempBitmap, 0, 0, null);
 
-                        imageResult.setImageBitmap(bitmapMaster);
+                        selectedImage.setImageBitmap(bitmapMaster);
 
                         //Create bitmap of same size for drawing
                         bitmapDrawingPane = Bitmap.createBitmap(
@@ -229,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
+
                         e.printStackTrace();
                     }
 
